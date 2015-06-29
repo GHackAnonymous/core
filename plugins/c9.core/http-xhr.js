@@ -102,13 +102,13 @@ define(function(require, module, exports) {
                 var res = {
                     body: xhr.responseText,
                     status: xhr.status,
-                    headers: parseHeaders(xhr.getAllResponseHeaders())
+                    headers: parseHeaders(xhr.getAllResponseHeaders()),
+                    $reqHeaders: headers // TODO remove when bug in readFileWithMetadata is fixed 
                 };
                 
                 var data = xhr.responseText;
-                if ((options.overrideMimeType || res.headers["content-type"])
-                    .indexOf("application/json") === 0
-                ) {
+                var contentType = options.overrideMimeType || res.headers["content-type"] || "";
+                if (contentType.indexOf("application/json") === 0) {
                     try {
                         data = JSON.parse(data);
                     } catch (e) {
